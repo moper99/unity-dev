@@ -1,0 +1,172 @@
+{
+    "FileVersion": "2025.9.30",
+    "EnableAddressable": true,
+    "SupportExtensionless": true,
+    "LocationToLower": false,
+    "IncludeAssetGUID": false,
+    "ReplaceAssetPathWithAddress": false,
+    "OutputNameStyle": 0,
+    "BuildBundleType": 1,
+    "BuildPipeline": "EditorSimulateBuildPipeline",
+    "PackageName": "DefaultPackage",
+    "PackageVersion": "Simulate",
+    "PackageNote": "2026/5/6 23:33:41",
+    "AssetList": [
+        {
+            "Address": "Cube",
+            "AssetPath": "Assets/AssetRaw/Actor/Cube.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 0,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "about",
+            "AssetPath": "Assets/AssetRaw/Configs/about.txt",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "cub1",
+            "AssetPath": "Assets/AssetRaw/Materials/cub1.mat",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "battle",
+            "AssetPath": "Assets/AssetRaw/Scenes/Battle/battle.unity",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "battleLightingSettings",
+            "AssetPath": "Assets/AssetRaw/Scenes/Battle/battleLightingSettings.lighting",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Basics_atlas0",
+            "AssetPath": "Assets/AssetRaw/UIRaw/Atlas/Basics_atlas0.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 4,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Basics_fui",
+            "AssetPath": "Assets/AssetRaw/UIRaw/Atlas/Basics_fui.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 4,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Basics_gojg7u",
+            "AssetPath": "Assets/AssetRaw/UIRaw/Atlas/Basics_gojg7u.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 4,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Basics_o4lt7w",
+            "AssetPath": "Assets/AssetRaw/UIRaw/Atlas/Basics_o4lt7w.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 4,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "BattleMainUI_atlas0",
+            "AssetPath": "Assets/AssetRaw/UIRaw/Atlas/BattleMainUI_atlas0.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 4,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "BattleMainUI_fui",
+            "AssetPath": "Assets/AssetRaw/UIRaw/Atlas/BattleMainUI_fui.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 4,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "LoginUI_atlas0",
+            "AssetPath": "Assets/AssetRaw/UIRaw/Atlas/LoginUI_atlas0.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 4,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "LoginUI_fui",
+            "AssetPath": "Assets/AssetRaw/UIRaw/Atlas/LoginUI_fui.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 4,
+            "DependBundleIDs": []
+        }
+    ],
+    "BundleList": [
+        {
+            "BundleName": "defaultpackage_assets_assetraw_actor.bundle",
+            "UnityCRC": 0,
+            "FileHash": "38b85e5090246f7abec1e6397fa5516e",
+            "FileCRC": 0,
+            "FileSize": 2987,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetraw_configs.bundle",
+            "UnityCRC": 0,
+            "FileHash": "b5a6b6dc921bbc109e8e3f1a5ef8dbf2",
+            "FileCRC": 0,
+            "FileSize": 24,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetraw_materials.bundle",
+            "UnityCRC": 0,
+            "FileHash": "f4f6b7bc4044ba32a7d96be76c2eb426",
+            "FileCRC": 0,
+            "FileSize": 3614,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetraw_scenes_battle.bundle",
+            "UnityCRC": 0,
+            "FileHash": "47ee8aabe0bc1d768219882757cedf31",
+            "FileCRC": 0,
+            "FileSize": 20077,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetraw_uiraw_atlas.bundle",
+            "UnityCRC": 0,
+            "FileHash": "bf0c9ffe287418ea619a2ab284d91f09",
+            "FileCRC": 0,
+            "FileSize": 290873,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        }
+    ]
+}

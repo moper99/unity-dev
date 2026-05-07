@@ -1,0 +1,28 @@
+# 依赖
+node_modules/
+package-lock.json
+
+# 会话状态
+production/session-state/
+production/session-logs/
+
+# 环境文件
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 临时文件
+*.tmp
+*.temp
+*.log

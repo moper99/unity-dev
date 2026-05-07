@@ -1,0 +1,17 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "*": "allow"
+  },
+  "share": "manual",
+  "autoupdate": true,
+  "snapshot": true,
+  "mcp": {
+    "unityMCP": {
+      "type": "remote",
+      "url": "http://127.0.0.1:8765/mcp",
+      "enabled": true
+    }
+  }
+
+}

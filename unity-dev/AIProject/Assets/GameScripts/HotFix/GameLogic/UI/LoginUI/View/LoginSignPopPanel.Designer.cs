@@ -8,20 +8,20 @@ using FairyGUI;
 namespace GameLogic
 {
     /// <summary>
-    /// BattleMainUIPanel 窗口设计类 - 自动生成，请勿手动修改。
-    /// 业务逻辑请在 BattleMainUIPanel.cs 中实现。
+    /// LoginSignPopPanel 窗口设计类 - 自动生成，请勿手动修改。
+    /// 业务逻辑请在 LoginSignPopPanel.cs 中实现。
     /// </summary>
-    public partial class BattleMainUIPanel : FairyUIWindow
+    public partial class LoginSignPopPanel : FairyUIWindow
     {
         /// <summary>
         /// 包名称常量。
         /// </summary>
-        public const string PackageNameConst = "BattleMainUI";
+        public const string PackageNameConst = "LoginUI";
 
         /// <summary>
         /// 组件名称常量。
         /// </summary>
-        public const string ComponentNameConst = "BattleMainUIPanel";
+        public const string ComponentNameConst = "LoginSignPopPanel";
 
         /// <inheritdoc/>
         public override string PackageName => PackageNameConst;
@@ -31,10 +31,7 @@ namespace GameLogic
 
         #region UI Fields
 
-        public CompMainUserInfo CompUserInfo;
-        public Controller CtrlJoystick;
-        public Transition TransHide;
-        public Transition TransShow;
+        public GButton Btngoogle;
 
         #endregion
 
@@ -44,10 +41,7 @@ namespace GameLogic
             base.BindMemberProperty();
 
             // 自动绑定 UI 组件字段
-            CompUserInfo = (CompMainUserInfo)GetChild("compUserInfo");
-            CtrlJoystick = GetController("ctrlJoystick");
-            TransHide = GetTransition("transHide");
-            TransShow = GetTransition("transShow");
+            Btngoogle = (GButton)GetChild("btngoogle");
         }
     }
 }

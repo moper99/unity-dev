@@ -1,21 +1,53 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using FairyGUI;
 using TEngine;
 using UnityEngine;
 
 namespace GameLogic
 {
     /// <summary>
-    /// UI层级枚举。
+    /// UI层级枚举（对齐参考项目 PanelDepthType）。
+    /// 层级从低到高：Scene → Main → Normal → Effect → High → Top → TopEffect
     /// </summary>
     public enum UILayer : int
     {
-        Bottom = 0,
-        UI = 1,
-        Top = 2,
-        Tips = 3,
-        System = 4,
+        /// <summary>
+        /// 场景附属UI（最低层级）。
+        /// </summary>
+        Scene = 0,
+
+        /// <summary>
+        /// 场景主页面。
+        /// </summary>
+        Main = 1,
+
+        /// <summary>
+        /// 常规窗口（默认层级）。
+        /// </summary>
+        Normal = 2,
+
+        /// <summary>
+        /// 特效层。
+        /// </summary>
+        Effect = 3,
+
+        /// <summary>
+        /// 引导/遮罩层。
+        /// </summary>
+        High = 4,
+
+        /// <summary>
+        /// 加载/云层。
+        /// </summary>
+        Top = 5,
+
+        /// <summary>
+        /// 点击特效层（最高层级）。
+        /// </summary>
+        TopEffect = 6,
     }
 
     /// <summary>
@@ -23,22 +55,6 @@ namespace GameLogic
     /// </summary>
     public abstract class FairyUIWindow
     {
-        #region 依赖注入
-
-        /// <summary>
-        /// 依赖注入回调。
-        /// </summary>
-        public static Action<FairyUIWindow>? Injector;
-
-        /// <summary>
-        /// 依赖注入。
-        /// </summary>
-        protected void Inject()
-        {
-            Injector?.Invoke(this);
-        }
-
-        #endregion
 
         #region 用户数据
 
@@ -96,9 +112,9 @@ namespace GameLogic
         public abstract string ComponentName { get; }
 
         /// <summary>
-        /// 窗口层级。
+        /// 窗口层级（默认 Normal，子类可重写）。
         /// </summary>
-        public virtual int WindowLayer => (int)UILayer.UI;
+        public virtual int WindowLayer => (int)UILayer.Normal;
 
         /// <summary>
         /// 是否为全屏窗口。
@@ -129,6 +145,26 @@ namespace GameLogic
         /// 是否支持对象池复用。
         /// </summary>
         public virtual bool UseObjectPool => false;
+
+        /// <summary>
+        /// 背景点击是否关闭窗口（默认false，子类可重写为true则点击关闭）。
+        /// </summary>
+        public virtual bool BackgroundClickClose => false;
+
+        /// <summary>
+        /// 是否启用背景模糊（默认false，子类可重写为true则启用）。
+        /// </summary>
+        public virtual bool BgBlur => false;
+
+        /// <summary>
+        /// 独立父节点（每个窗口一个）。
+        /// </summary>
+        internal CompPanelParent? _panelParent;
+
+        /// <summary>
+        /// 窗口辅助工具（协程/定时器/延迟调用等）。
+        /// </summary>
+        internal UIPanelHelper? _helper;
 
         /// <summary>
         /// 重置窗口状态（从对象池取出时调用）。
@@ -260,7 +296,10 @@ namespace GameLogic
         /// </summary>
         private void CreateWindow()
         {
-            _window = new FairyGUI.Window();
+            // 1. 创建父节点
+            CreatePanelParent();
+
+            // 2. 创建内容
             Log.Debug($"CreateWindow: {PackageName}/{ComponentName}");
             var obj = FairyUIPackageLoader.CreateObject(PackageName, ComponentName);
             Log.Debug($"CreateObject result: {obj?.GetType().FullName ?? "null"}");
@@ -271,13 +310,83 @@ namespace GameLogic
                 throw new Exception($"Failed to create component: {PackageName}/{ComponentName}, got {obj?.GetType().FullName ?? "null"}");
             }
 
-            _window.contentPane = _contentPane;
+            // 3. 将内容添加到父节点
+            if (_panelParent != null)
+            {
+                _panelParent.AddChild(_contentPane);
+            }
+
             GObject = _contentPane;
 
             if (FullScreen)
             {
                 _contentPane.MakeFullScreen();
             }
+        }
+
+        /// <summary>
+        /// 创建独立的父节点。
+        /// </summary>
+        private void CreatePanelParent()
+        {
+            // 确保Basic包已加载
+            if (!FairyUIPackageLoader.IsPackageLoaded("Basics"))
+            {
+                FairyUIPackageLoader.AddPackage("Basics");
+            }
+
+            // 创建父节点
+            _panelParent = CompPanelParent.CreateInstance();
+
+            // 获取层级容器并添加到对应层级
+            var layerRoot = FairyUIModule.Instance.GetLayerRoot((UILayer)WindowLayer);
+            layerRoot.AddChild(_panelParent);
+            _panelParent.MakeFullScreen();
+
+            // 背景遮罩始终显示
+            if (BackgroundClickClose)
+            {
+                // 注册背景点击事件
+                _panelParent.BtnBackGround.onClick.Add(OnBackgroundClick);
+            }
+
+            // 适配安全区域
+            AdaptSafeArea();
+
+            // 初始化辅助工具
+            _helper = new UIPanelHelper();
+        }
+
+        /// <summary>
+        /// 适配安全区域（刘海屏等）。
+        /// </summary>
+        private void AdaptSafeArea()
+        {
+            if (_panelParent == null) return;
+
+            var safeArea = Screen.safeArea;
+            var screenH = Screen.height;
+
+            float topOffset = (screenH - safeArea.y - safeArea.height) / screenH;
+            float bottomOffset = safeArea.y / screenH;
+
+            if (_panelParent.GraphSafeTop != null)
+            {
+                _panelParent.GraphSafeTop.height = topOffset * 100;
+            }
+
+            if (_panelParent.GraphSafeBottom != null)
+            {
+                _panelParent.GraphSafeBottom.height = bottomOffset * 100;
+            }
+        }
+
+        /// <summary>
+        /// 背景点击事件处理。
+        /// </summary>
+        private void OnBackgroundClick()
+        {
+            FairyUIModule.Instance.CloseUI(this.GetType());
         }
 
         /// <summary>
@@ -288,7 +397,6 @@ namespace GameLogic
             if (!_isCreated)
             {
                 _isCreated = true;
-                Inject();
                 BindMemberProperty();
                 RegisterEvent();
                 OnCreate();
@@ -314,13 +422,15 @@ namespace GameLogic
         /// </summary>
         public void Show()
         {
-            if (_window == null)
+            if (_panelParent == null)
             {
                 Log.Error($"Window not loaded: {WindowName}");
                 return;
             }
 
-            _window.Show();
+            // 显示父节点（背景遮罩始终显示）
+            _panelParent.visible = true;
+
             IsVisible = true;
             OnShow();
         }
@@ -330,13 +440,13 @@ namespace GameLogic
         /// </summary>
         public void Hide()
         {
-            if (_window == null)
+            if (_panelParent == null)
             {
                 return;
             }
 
-            _window.Hide();
             IsVisible = false;
+            _helper?.Clear();
             OnHide();
         }
 
@@ -358,11 +468,19 @@ namespace GameLogic
         /// </summary>
         internal void Destroy()
         {
-            if (_window != null)
+            if (_panelParent != null)
             {
                 _loadCts?.Cancel();
                 FairyUIModule.Instance.UnregisterWindowUpdate(this);
                 UnregisterEvent();
+
+                // 清理辅助工具
+                _helper?.Clear();
+                _helper = null;
+
+                // 清理粒子特效
+                CleanupParticleEffects();
+
                 OnDestroy();
 
                 if (UseObjectPool)
@@ -371,8 +489,9 @@ namespace GameLogic
                 }
                 else
                 {
-                    _window.Dispose();
-                    _window = null;
+                    // 销毁父节点（会同时销毁所有子节点）
+                    _panelParent.Dispose();
+                    _panelParent = null;
                     _contentPane = null;
                     GObject = null;
                 }
@@ -573,6 +692,38 @@ namespace GameLogic
             return FindChild(path) as T;
         }
 
+        /// <summary>
+        /// 通过深路径查找子组件（如 "a.b.c"）。
+        /// </summary>
+        /// <param name="path">路径（用点号分隔）。</param>
+        /// <returns>FairyGUI对象。</returns>
+        public FairyGUI.GObject? GetChildByPath(string path)
+        {
+            if (string.IsNullOrEmpty(path) || Panel == null) return null;
+
+            string[] parts = path.Split('.');
+            FairyGUI.GObject current = Panel;
+
+            for (int i = 0; i < parts.Length; i++)
+            {
+                if (current == null) return null;
+                current = current.asCom.GetChild(parts[i]);
+            }
+
+            return current;
+        }
+
+        /// <summary>
+        /// 通过深路径查找子组件并转换类型。
+        /// </summary>
+        /// <typeparam name="T">目标类型。</typeparam>
+        /// <param name="path">路径（用点号分隔）。</param>
+        /// <returns>FairyGUI对象。</returns>
+        public T? GetChildByPath<T>(string path) where T : FairyGUI.GObject
+        {
+            return GetChildByPath(path) as T;
+        }
+
         #endregion
 
         #region 获取控制器
@@ -627,6 +778,115 @@ namespace GameLogic
 
         #endregion
 
+        #region 3D模型/粒子特效
+
+        /// <summary>
+        /// 粒子特效GoWrapper列表（跟随界面生命周期）。
+        /// </summary>
+        private readonly List<FairyGUI.GoWrapper> _particleWrappers = new List<FairyGUI.GoWrapper>();
+
+        /// <summary>
+        /// 添加粒子特效到UI（跟随界面生命周期）。
+        /// 使用GoWrapper包裹ParticleSystem的GameObject。
+        /// </summary>
+        /// <param name="particlePrefab">粒子特效预制体。</param>
+        /// <param name="localPosition">局部位置。</param>
+        /// <param name="cloneMaterial">是否克隆材质（默认true，避免材质共享问题）。</param>
+        /// <returns>GoWrapper实例。</returns>
+        protected FairyGUI.GoWrapper? AddParticleEffect(GameObject particlePrefab, GGraph holder,Vector2 localPosition = default, bool cloneMaterial = true)
+        {
+            if (particlePrefab == null)
+            {
+                Log.Warning("AddParticleEffect: particlePrefab is null");
+                return null;
+            }
+
+            if (Panel == null)
+            {
+                Log.Warning("AddParticleEffect: Panel is null");
+                return null;
+            }
+
+            var go = UnityEngine.Object.Instantiate(particlePrefab);
+
+            // 使用GoWrapper包裹粒子特效
+            var wrapper = new FairyGUI.GoWrapper();
+            wrapper.SetWrapTarget(go, cloneMaterial);
+            holder.SetNativeObject(wrapper);
+
+            if (localPosition != default)
+            {
+                wrapper.SetXY(localPosition.x, localPosition.y);
+            }
+
+            _particleWrappers.Add(wrapper);
+            return wrapper;
+        }
+
+        /// <summary>
+        /// 清理所有粒子特效。
+        /// </summary>
+        private void CleanupParticleEffects()
+        {
+            foreach (var wrapper in _particleWrappers)
+            {
+                if (wrapper != null)
+                {
+                    // GoWrapper.Dispose()会销毁wrapTarget
+                    wrapper.Dispose();
+                }
+            }
+            _particleWrappers.Clear();
+        }
+
+        /// <summary>
+        /// 添加3D模型到UI（业务代码管理生命周期）。
+        /// 使用GoWrapper包裹3D模型的GameObject。
+        /// </summary>
+        /// <param name="gameObject">3D模型GameObject。</param>
+        /// <param name="width">显示宽度。</param>
+        /// <param name="height">显示高度。</param>
+        /// <param name="cloneMaterial">是否克隆材质（默认true）。</param>
+        /// <returns>GoWrapper实例。</returns>
+        protected FairyGUI.GoWrapper? Add3DModel(GameObject gameObject,GGraph holder, int width, int height, bool cloneMaterial = true)
+        {
+            if (gameObject == null)
+            {
+                Log.Warning("Add3DModel: gameObject is null");
+                return null;
+            }
+
+            if (Panel == null)
+            {
+                Log.Warning("Add3DModel: Panel is null");
+                return null;
+            }
+
+            // 使用GoWrapper包裹3D模型
+            var wrapper = new FairyGUI.GoWrapper();
+            wrapper.SetWrapTarget(gameObject, cloneMaterial);
+            wrapper.SetSize(width, height);
+            holder.SetNativeObject(wrapper);
+
+            return wrapper;
+        }
+
+        /// <summary>
+        /// 移除3D模型GoWrapper（不销毁GameObject，由业务代码管理）。
+        /// </summary>
+        /// <param name="wrapper">GoWrapper实例。</param>
+        protected void RemoveGoWrapper(FairyGUI.GoWrapper? wrapper)
+        {
+            if (wrapper != null)
+            {
+                // 解除包裹关系，但不销毁GameObject
+                wrapper.wrapTarget = null;
+                wrapper.Dispose();
+            }
+        }
+
+        #endregion
+
         #region 内部更新
 
         /// <summary>
@@ -634,7 +894,7 @@ namespace GameLogic
         /// </summary>
         internal bool InternalUpdate()
         {
-            if (!IsLoadDone || _window == null || !_window.isShowing)
+            if (!IsLoadDone || _panelParent == null || !IsVisible)
             {
                 return false;
             }
@@ -642,6 +902,72 @@ namespace GameLogic
             _hasOverrideUpdate = true;
             OnUpdate();
             return _hasOverrideUpdate;
+        }
+
+        #endregion
+
+        #region 排序层级
+
+        /// <summary>
+        /// 设置窗口排序层级（手动调整同层级内的显示顺序）。
+        /// </summary>
+        /// <param name="order">排序值（越大越靠前）。</param>
+        public void SetSortingOrder(int order)
+        {
+            if (_panelParent != null)
+            {
+                _panelParent.sortingOrder = order;
+            }
+        }
+
+        /// <summary>
+        /// 获取窗口排序层级。
+        /// </summary>
+        /// <returns>排序值。</returns>
+        public int GetSortingOrder()
+        {
+            return _panelParent?.sortingOrder ?? 0;
+        }
+
+        #endregion
+
+        #region 返回键/应用生命周期
+
+        /// <summary>
+        /// Android返回键处理（子类可重写）。
+        /// </summary>
+        protected virtual void OnBackButton()
+        {
+            // 默认点击背景关闭
+            if (BackgroundClickClose)
+            {
+                FairyUIModule.Instance.CloseUI(GetType());
+            }
+        }
+
+        /// <summary>
+        /// 应用进入后台回调（子类可重写）。
+        /// </summary>
+        /// <param name="pause">是否暂停。</param>
+        protected virtual void OnApplicationPause(bool pause)
+        {
+        }
+
+        /// <summary>
+        /// 处理Android返回键（由外部调用）。
+        /// </summary>
+        public void HandleBackButton()
+        {
+            OnBackButton();
+        }
+
+        /// <summary>
+        /// 处理应用前后台切换（由外部调用）。
+        /// </summary>
+        /// <param name="pause">是否暂停。</param>
+        public void HandleApplicationPause(bool pause)
+        {
+            OnApplicationPause(pause);
         }
 
         #endregion

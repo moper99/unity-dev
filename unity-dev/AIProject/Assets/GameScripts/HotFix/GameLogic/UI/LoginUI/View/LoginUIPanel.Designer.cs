@@ -32,16 +32,10 @@ namespace GameLogic
         #region UI Fields
 
         public GButton BtnEnterGame;
-        public Controller Ctrl;
-        public Controller CtrlDebug;
-        public Controller CtrlFinger;
+        public GButton BtnSign;
         public Controller CtrlLoading;
-        public Controller CtrlPlatform;
-        public GGroup GroupEnterTip;
         public GLoader LoaderEnter;
-        public Transition TransFingerShow;
         public Transition TransShow;
-        public GTextField TxtEnterGame;
 
         #endregion
 
@@ -52,16 +46,10 @@ namespace GameLogic
 
             // 自动绑定 UI 组件字段
             BtnEnterGame = (GButton)GetChild("btnEnterGame");
-            Ctrl = GetController("ctrl");
-            CtrlDebug = GetController("ctrlDebug");
-            CtrlFinger = GetController("ctrlFinger");
+            BtnSign = (GButton)GetChild("btnSign");
             CtrlLoading = GetController("ctrlLoading");
-            CtrlPlatform = GetController("ctrlPlatform");
-            GroupEnterTip = (GGroup)GetChild("groupEnterTip");
             LoaderEnter = (GLoader)GetChild("loaderEnter");
-            TransFingerShow = GetTransition("transFingerShow");
             TransShow = GetTransition("transShow");
-            TxtEnterGame = (GTextField)GetChild("txtEnterGame");
         }
     }
 }

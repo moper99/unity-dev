@@ -49,8 +49,6 @@ namespace GameLogic
             base.OnShow();
             Log.Info("LoginUIPanel OnShow");
             // 初始化登录界面状态
-            CtrlLoading.selectedIndex = 0;
-            BtnEnterGame.enabled = true;
         }
 
         /// <inheritdoc/>
@@ -73,12 +71,9 @@ namespace GameLogic
         private void OnClickEnterGame()
         {
             Log.Info("点击进入游戏");
-            // 切换到加载状态
-            CtrlLoading.selectedIndex = 1;
-            // 禁用按钮防止重复点击
-            BtnEnterGame.enabled = false;
+            
             // 执行登录
-            DoLogin().Forget();
+           // DoLogin().Forget();
         }
 
         /// <summary>

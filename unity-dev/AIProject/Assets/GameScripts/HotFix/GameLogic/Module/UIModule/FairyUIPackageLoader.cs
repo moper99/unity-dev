@@ -15,7 +15,17 @@ namespace GameLogic
     {
         private static readonly HashSet<string> _loadedPackages = new HashSet<string>();
         private static readonly Dictionary<string, AssetHandle> _assetHandles = new Dictionary<string, AssetHandle>();
+        private static readonly Dictionary<string, int> _packageRefCount = new Dictionary<string, int>();
         private static string _assetBasePath = "Assets/AssetRaw/UIRaw/Atlas";
+
+        /// <summary>
+        /// 设置资源基础路径。
+        /// </summary>
+        /// <param name="basePath">基础路径。</param>
+        public static void SetAssetBasePath(string basePath)
+        {
+            _assetBasePath = basePath;
+        }
 
         /// <summary>
         /// 同步加载UIPackage。
@@ -26,12 +36,16 @@ namespace GameLogic
         {
             if (_loadedPackages.Contains(packageName))
             {
+                // 增加引用计数
+                IncrementRefCount(packageName);
+                onProgress?.Invoke(1f);
                 return;
             }
 
             string assetPath = GetAssetPath(packageName);
             FairyGUI.UIPackage.AddPackage(assetPath, LoadResource);
             _loadedPackages.Add(packageName);
+            _packageRefCount[packageName] = 1;
             onProgress?.Invoke(1f);
         }
 
@@ -44,6 +58,8 @@ namespace GameLogic
         {
             if (_loadedPackages.Contains(packageName))
             {
+                // 增加引用计数
+                IncrementRefCount(packageName);
                 return;
             }
 
@@ -65,6 +81,43 @@ namespace GameLogic
 
             _assetHandles[packageName] = descHandle;
             _loadedPackages.Add(packageName);
+            _packageRefCount[packageName] = 1;
+        }
+
+        /// <summary>
+        /// 卸载单个UIPackage。
+        /// </summary>
+        /// <param name="packageName">包名称。</param>
+        /// <returns>是否成功卸载。</returns>
+        public static bool RemovePackage(string packageName)
+        {
+            if (!_loadedPackages.Contains(packageName))
+            {
+                return false;
+            }
+
+            // 减少引用计数
+            if (!DecrementRefCount(packageName))
+            {
+                // 引用计数仍大于0，不卸载
+                return false;
+            }
+
+            // 卸载包
+            FairyGUI.UIPackage.RemovePackage(packageName);
+
+            // 释放资源句柄
+            if (_assetHandles.TryGetValue(packageName, out var handle))
+            {
+                handle.Dispose();
+                _assetHandles.Remove(packageName);
+            }
+
+            _loadedPackages.Remove(packageName);
+            _packageRefCount.Remove(packageName);
+
+            Log.Debug($"FairyUIPackageLoader.RemovePackage: {packageName}");
+            return true;
         }
 
         /// <summary>
@@ -84,6 +137,7 @@ namespace GameLogic
 
             _loadedPackages.Clear();
             _assetHandles.Clear();
+            _packageRefCount.Clear();
         }
 
         /// <summary>
@@ -94,6 +148,61 @@ namespace GameLogic
         public static bool IsPackageLoaded(string packageName)
         {
             return _loadedPackages.Contains(packageName);
+        }
+
+        /// <summary>
+        /// 获取UIPackage实例。
+        /// </summary>
+        /// <param name="packageName">包名称。</param>
+        /// <returns>UIPackage实例。</returns>
+        public static FairyGUI.UIPackage GetPackage(string packageName)
+        {
+            return FairyGUI.UIPackage.GetByName(packageName);
+        }
+
+        /// <summary>
+        /// 获取包引用计数。
+        /// </summary>
+        /// <param name="packageName">包名称。</param>
+        /// <returns>引用计数。</returns>
+        public static int GetRefCount(string packageName)
+        {
+            return _packageRefCount.TryGetValue(packageName, out var count) ? count : 0;
+        }
+
+        /// <summary>
+        /// 预加载UIPackage（只加载不使用）。
+        /// </summary>
+        /// <param name="packageNames">包名称列表。</param>
+        /// <param name="ct">取消令牌。</param>
+        public static async UniTask PreloadPackage(string[] packageNames, CancellationToken ct = default)
+        {
+            if (packageNames == null) return;
+
+            var tasks = new List<UniTask>();
+            for (int i = 0; i < packageNames.Length; i++)
+            {
+                if (!string.IsNullOrEmpty(packageNames[i]) && !_loadedPackages.Contains(packageNames[i]))
+                {
+                    tasks.Add(AddPackageAsync(packageNames[i], ct));
+                }
+            }
+
+            await UniTask.WhenAll(tasks);
+            Log.Debug($"FairyUIPackageLoader.PreloadPackage: Loaded {tasks.Count} packages.");
+        }
+
+        /// <summary>
+        /// 预加载UIPackage（只加载不使用）。
+        /// </summary>
+        /// <param name="packageName">包名称。</param>
+        /// <param name="ct">取消令牌。</param>
+        public static async UniTask PreloadPackage(string packageName, CancellationToken ct = default)
+        {
+            if (!string.IsNullOrEmpty(packageName) && !_loadedPackages.Contains(packageName))
+            {
+                await AddPackageAsync(packageName, ct);
+            }
         }
 
         /// <summary>
@@ -113,9 +222,41 @@ namespace GameLogic
             return FairyGUI.UIPackage.CreateObject(packageName, componentName);
         }
 
+        /// <summary>
+        /// 获取已加载的包名称列表。
+        /// </summary>
+        /// <returns>包名称列表。</returns>
+        public static List<string> GetLoadedPackageNames()
+        {
+            return new List<string>(_loadedPackages);
+        }
+
         private static string GetAssetPath(string packageName)
         {
             return $"{_assetBasePath}/{packageName}";
+        }
+
+        private static void IncrementRefCount(string packageName)
+        {
+            if (_packageRefCount.ContainsKey(packageName))
+            {
+                _packageRefCount[packageName]++;
+            }
+            else
+            {
+                _packageRefCount[packageName] = 1;
+            }
+        }
+
+        private static bool DecrementRefCount(string packageName)
+        {
+            if (!_packageRefCount.ContainsKey(packageName))
+            {
+                return true; // 可以卸载
+            }
+
+            _packageRefCount[packageName]--;
+            return _packageRefCount[packageName] <= 0;
         }
 
         private static object LoadResource(string name, string extension, Type type, out FairyGUI.DestroyMethod destroyMethod)

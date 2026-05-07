@@ -392,7 +392,7 @@ namespace FairyGUI
         /// <summary>
         /// 
         /// </summary>
-        protected void LoadContent()
+        protected virtual void LoadContent()
         {
             ClearContent();
 
@@ -666,7 +666,7 @@ namespace FairyGUI
             InvalidateBatchingState();
         }
 
-        private void ClearContent()
+        protected void ClearContent()
         {
             ClearErrorState();
 

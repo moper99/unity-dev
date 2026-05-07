@@ -8,5 +8,7 @@ namespace GameLogic
         void ShowLoginUI();
 
         void CloseLoginUI();
+        
+        void RefreshUI();
     }
 }

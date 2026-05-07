@@ -54,32 +54,6 @@ public partial class GameApp
         BattleMainModule.Instance.Active();
     }
 
-    /// <summary>
-    /// 登录成功回调。
-    /// </summary>
-    public static void OnLoginSuccess()
-    {
-        Log.Info("[GameApp] 登录成功，开始跳转场景");
-        LoginSuccessAsync().Forget();
-    }
-
-    /// <summary>
-    /// 登录成功后异步跳转场景。
-    /// </summary>
-    private static async UniTaskVoid LoginSuccessAsync()
-    {
-        // 关闭登录界面
-        GameModule.UI.CloseUI<LoginUIPanel>();
-        
-        // 加载战斗场景
-        Log.Info("[GameApp] 加载战斗场景...");
-        await GameModule.Scene.LoadSceneAsync("Assets/AssetRaw/Scenes/Battle/battle.unity");
-        
-        // 显示主界面
-        Log.Info("[GameApp] 场景加载完成，显示主界面");
-        GameModule.UI.ShowUIAsync<BattleMainUIPanel>();
-    }
-    
     private static void Release()
     {
         Log.Info("======= Release GameApp =======");

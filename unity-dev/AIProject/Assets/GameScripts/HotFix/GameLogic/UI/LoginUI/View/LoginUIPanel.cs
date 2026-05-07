@@ -1,6 +1,7 @@
 using FairyGUI;
 using TEngine;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace GameLogic
 {
@@ -13,6 +14,9 @@ namespace GameLogic
         protected override void RegisterEvent()
         {
             base.RegisterEvent();
+            
+            GameEvent.AddEventListener(ILoginUI_Event.ShowLoginUI,ShowLoginUI);
+            
             BtnEnterGame.onClick.Add(OnClickEnterGame);
         }
 
@@ -20,6 +24,8 @@ namespace GameLogic
         protected override void UnregisterEvent()
         {
             base.UnregisterEvent();
+            GameEvent.RemoveEventListener(ILoginUI_Event.ShowLoginUI,ShowLoginUI);
+            
             BtnEnterGame.onClick.Remove(OnClickEnterGame);
         }
 
@@ -80,11 +86,15 @@ namespace GameLogic
         /// </summary>
         private async UniTaskVoid DoLogin()
         {
+            //test
+            GameEvent.Send(ILoginUI_Event.ShowLoginUI);
+            
             var success = await LoginModule.Instance.LoginAsync();
             if (success)
             {
                 // 登录成功，通知GameApp跳转场景
-                GameApp.OnLoginSuccess();
+                LoginModule.Instance.OnLoginSuccess();
+                
             }
             else
             {
@@ -93,6 +103,11 @@ namespace GameLogic
                 BtnEnterGame.enabled = true;
                 Log.Error("登录失败");
             }
+        }
+        
+        private void ShowLoginUI()
+        {
+            Debug.Log("ShowLoginUI-----------------");
         }
     }
 }

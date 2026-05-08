@@ -16,6 +16,7 @@ namespace GameLogic
         private readonly Dictionary<Type, FairyUIWindow> _windows = new Dictionary<Type, FairyUIWindow>();
         private readonly List<FairyUIWindow> _windowStack = new List<FairyUIWindow>();
         private readonly List<FairyUIWindow> _updateWindows = new List<FairyUIWindow>();
+        private readonly HashSet<Type> _loadingWindows = new HashSet<Type>();
         private CancellationTokenSource _cts = new CancellationTokenSource();
         private IObjectPool<UIWindowObject> _windowPool;
         private bool _isInitialized = false;
@@ -36,6 +37,7 @@ namespace GameLogic
             }
 
             InitLayerContainers();
+            GRoot.inst.onSizeChanged.Add(OnGRootResize);
             _isInitialized = true;
             Log.Info("FairyUIModule initialized.");
         }
@@ -88,6 +90,7 @@ namespace GameLogic
             }
             _layerRoots.Clear();
 
+            GRoot.inst.onSizeChanged.Remove(OnGRootResize);
             _isInitialized = false;
             Log.Info("FairyUIModule released.");
         }
@@ -145,15 +148,33 @@ namespace GameLogic
         /// <summary>
         /// 关闭窗口（通过类型）。
         /// </summary>
-        public void CloseUI(Type type)
+        /// <param name="type">窗口类型。</param>
+        /// <param name="immediate">是否立即关闭（跳过动画）。</param>
+        public void CloseUI(Type type, bool immediate = false)
         {
             if (_windows.TryGetValue(type, out var window))
             {
                 UnregisterWindowUpdate(window);
-                if (window.Close())
+
+                // 移除模糊UI
+                if (window.BgBlur)
                 {
+                    BgBlurManager.Instance.RemoveBlurUI(type.FullName, window);
+                }
+
+                if (immediate)
+                {
+                    window.Destroy();
                     _windows.Remove(type);
                     _windowStack.Remove(window);
+                }
+                else
+                {
+                    if (window.Close())
+                    {
+                        _windows.Remove(type);
+                        _windowStack.Remove(window);
+                    }
                 }
             }
         }
@@ -185,8 +206,9 @@ namespace GameLogic
             _updateWindows.Clear();
             for (int i = _windowStack.Count - 1; i >= 0; i--)
             {
-                _windowStack[i].Close();
-                _windowStack[i].Destroy();
+                var window = _windowStack[i];
+                window.Hide();
+                window.Close();
             }
             _windowStack.Clear();
             _windows.Clear();
@@ -325,33 +347,6 @@ namespace GameLogic
         }
 
         /// <summary>
-        /// 关闭窗口（通过类型，支持立即关闭）。
-        /// </summary>
-        /// <param name="type">窗口类型。</param>
-        /// <param name="immediate">是否立即关闭。</param>
-        public void CloseUI(Type type, bool immediate)
-        {
-            if (_windows.TryGetValue(type, out var window))
-            {
-                UnregisterWindowUpdate(window);
-                if (immediate)
-                {
-                    window.Destroy();
-                    _windows.Remove(type);
-                    _windowStack.Remove(window);
-                }
-                else
-                {
-                    if (window.Close())
-                    {
-                        _windows.Remove(type);
-                        _windowStack.Remove(window);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
         /// 按层级关闭所有窗口。
         /// </summary>
         /// <param name="layer">UI层级。</param>
@@ -406,10 +401,10 @@ namespace GameLogic
         private readonly List<FairyUIWindow> _tempHideList = new List<FairyUIWindow>();
 
         /// <summary>
-        /// 临时隐藏除指定窗口外的所有窗口。
+        /// 临时隐藏面板（内部通用方法）。
         /// </summary>
-        /// <typeparam name="T">排除的窗口类型。</typeparam>
-        public void TempHideAllPanelsExcept<T>() where T : FairyUIWindow
+        /// <param name="shouldExclude">判断窗口是否应排除的委托。</param>
+        private void TempHideAllPanelsExceptInternal(Func<FairyUIWindow, bool> shouldExclude)
         {
             if (_tempHideList.Count > 0)
             {
@@ -420,7 +415,7 @@ namespace GameLogic
             for (int i = 0; i < _windowStack.Count; i++)
             {
                 var window = _windowStack[i];
-                if (window is T) continue;
+                if (shouldExclude(window)) continue;
                 if (IsHighLayer(window)) continue;
 
                 if (window.IsVisible && window._panelParent != null)
@@ -432,29 +427,17 @@ namespace GameLogic
         }
 
         /// <summary>
+        /// 临时隐藏除指定窗口外的所有窗口。
+        /// </summary>
+        /// <typeparam name="T">排除的窗口类型。</typeparam>
+        public void TempHideAllPanelsExcept<T>() where T : FairyUIWindow
+            => TempHideAllPanelsExceptInternal(w => w is T);
+
+        /// <summary>
         /// 临时隐藏除指定两个窗口外的所有窗口。
         /// </summary>
         public void TempHideAllPanelsExcept<T1, T2>() where T1 : FairyUIWindow where T2 : FairyUIWindow
-        {
-            if (_tempHideList.Count > 0)
-            {
-                ShowAllTempHidePanels();
-            }
-            _tempHideList.Clear();
-
-            for (int i = 0; i < _windowStack.Count; i++)
-            {
-                var window = _windowStack[i];
-                if (window is T1 || window is T2) continue;
-                if (IsHighLayer(window)) continue;
-
-                if (window.IsVisible && window._panelParent != null)
-                {
-                    window._panelParent.visible = false;
-                    _tempHideList.Add(window);
-                }
-            }
-        }
+            => TempHideAllPanelsExceptInternal(w => w is T1 || w is T2);
 
         /// <summary>
         /// 临时隐藏除指定类型数组外的所有窗口。
@@ -463,57 +446,34 @@ namespace GameLogic
         public void TempHideAllPanelsExcept(params Type[] excludeTypes)
         {
             if (excludeTypes == null) return;
-
-            if (_tempHideList.Count > 0)
-            {
-                ShowAllTempHidePanels();
-            }
-            _tempHideList.Clear();
-
-            for (int i = 0; i < _windowStack.Count; i++)
-            {
-                var window = _windowStack[i];
-                bool isExclude = false;
-                for (int j = 0; j < excludeTypes.Length; j++)
-                {
-                    if (excludeTypes[j].IsInstanceOfType(window))
-                    {
-                        isExclude = true;
-                        break;
-                    }
-                }
-
-                if (isExclude) continue;
-                if (IsHighLayer(window)) continue;
-
-                if (window.IsVisible && window._panelParent != null)
-                {
-                    window._panelParent.visible = false;
-                    _tempHideList.Add(window);
-                }
-            }
+            TempHideAllPanelsExceptInternal(w => Array.Exists(excludeTypes, t => t.IsInstanceOfType(w)));
         }
 
         /// <summary>
         /// 临时隐藏所有窗口。
         /// </summary>
         public void TempHideAllPanelsExcept()
-        {
-            if (_tempHideList.Count > 0)
-            {
-                ShowAllTempHidePanels();
-            }
-            _tempHideList.Clear();
+            => TempHideAllPanelsExceptInternal(_ => false);
 
+        /// <summary>
+        /// 获取窗口在显示栈中的索引（值越大越靠前）。
+        /// </summary>
+        public int GetWindowIndex(FairyUIWindow window)
+        {
+            return _windowStack.IndexOf(window);
+        }
+
+        /// <summary>
+        /// 处理屏幕尺寸变化。
+        /// </summary>
+        private void OnGRootResize()
+        {
             for (int i = 0; i < _windowStack.Count; i++)
             {
                 var window = _windowStack[i];
-                if (IsHighLayer(window)) continue;
-
-                if (window.IsVisible && window._panelParent != null)
+                if (window.IsVisible)
                 {
-                    window._panelParent.visible = false;
-                    _tempHideList.Add(window);
+                    window.OnScreenChanged();
                 }
             }
         }
@@ -591,7 +551,29 @@ namespace GameLogic
 
         #endregion
 
-        #region 内部窗口Update管理
+        /// <summary>
+        /// 标记窗口开始加载。
+        /// </summary>
+        internal void MarkWindowLoading(Type type)
+        {
+            _loadingWindows.Add(type);
+        }
+
+        /// <summary>
+        /// 标记窗口加载结束。
+        /// </summary>
+        internal void MarkWindowLoaded(Type type)
+        {
+            _loadingWindows.Remove(type);
+        }
+
+        /// <summary>
+        /// 检查窗口是否正在加载。
+        /// </summary>
+        internal bool IsWindowLoading(Type type)
+        {
+            return _loadingWindows.Contains(type);
+        }
 
         /// <summary>
         /// 窗口加载失败时清理。
@@ -621,8 +603,6 @@ namespace GameLogic
             _updateWindows.Remove(window);
         }
 
-        #endregion
-
         #region 私有方法
 
         private T ShowUIImp<T>(bool isAsync, params object[] userDatas) where T : FairyUIWindow, new()
@@ -639,6 +619,16 @@ namespace GameLogic
                 return existingWindow;
             }
 
+            // 异步加载守护：如果已经在加载中，则直接返回该窗口
+            if (isAsync && IsWindowLoading(type))
+            {
+                // 注意：此时窗口可能还没被添加到 _windows 字典中，但已经被创建并处于加载状态
+                // 我们需要一种方式找到这个正在加载的窗口。
+                // 简单的做法是：在 MarkWindowLoading 时就将窗口放入 _windows。
+                Log.Debug($"Window {type.Name} is already loading, skipping duplicate request.");
+                return _windows.TryGetValue(type, out var loadingWindow) ? loadingWindow : null;
+            }
+
             var window = GetFromPoolOrCreate(type);
             if (window == null)
             {
@@ -649,6 +639,17 @@ namespace GameLogic
             window.WindowName = type.FullName;
             _windows[type] = window;
             _windowStack.Add(window);
+
+            // 添加模糊UI
+            if (window.BgBlur)
+            {
+                BgBlurManager.Instance.AddBlurUI(type.FullName, window);
+            }
+
+            if (isAsync)
+            {
+                MarkWindowLoading(type);
+            }
 
             window.Load(isAsync, userDatas);
 
@@ -693,7 +694,31 @@ namespace GameLogic
 
         #endregion
 
-        #region IUpdate
+        /// <summary>
+        /// 根据组件获取所属面板。
+        /// </summary>
+        public FairyUIWindow GetPanelByChild(GObject obj)
+        {
+            if (obj == null || obj.displayObject == null) return null;
+            
+            var targetTrans = obj.displayObject.cachedTransform;
+            if (targetTrans == null) return null;
+
+            // 从栈顶向栈底查找，确保返回最上层的面板
+            for (int i = _windowStack.Count - 1; i >= 0; i--)
+            {
+                var window = _windowStack[i];
+                if (window._panelParent != null && window._panelParent.displayObject != null)
+                {
+                    var rootTrans = window._panelParent.displayObject.cachedTransform;
+                    if (rootTrans != null && targetTrans.IsChildOf(rootTrans))
+                    {
+                        return window;
+                    }
+                }
+            }
+            return null;
+        }
 
         public void OnUpdate()
         {
@@ -702,8 +727,6 @@ namespace GameLogic
                 _updateWindows[i].InternalUpdate();
             }
         }
-
-        #endregion
 
         #region 对象池
 
@@ -730,12 +753,12 @@ namespace GameLogic
             string poolName = type.FullName;
             if (_windowPool != null && _windowPool.CanSpawn(poolName))
             {
-                var obj = _windowPool.Spawn(poolName);
+                var obj = _windowPool.Spawn(poolName) as UIWindowObject;
                 var window = obj.Target as FairyUIWindow;
                 if (window != null)
                 {
-                    // 从对象池恢复：重新创建内容
-                    RestoreWindowContent(window);
+                    // 从对象池恢复：复用缓存的组件
+                    RestoreWindowContent(window, obj.CachedContent);
                 }
                 return window;
             }
@@ -745,19 +768,29 @@ namespace GameLogic
         /// <summary>
         /// 恢复窗口内容（从对象池取出时调用）。
         /// </summary>
-        private void RestoreWindowContent(FairyUIWindow window)
+        private void RestoreWindowContent(FairyUIWindow window, GComponent cachedContent)
         {
-            if (window._panelParent != null && window._contentPane == null)
+            if (window._panelParent != null)
             {
-                // 重新创建内容
-                var obj = FairyUIPackageLoader.CreateObject(window.PackageName, window.ComponentName);
-                var contentPane = obj as FairyGUI.GComponent;
-
-                if (contentPane != null)
+                if (cachedContent != null)
                 {
-                    window._panelParent.AddChild(contentPane);
-                    window._contentPane = contentPane;
-                    window.GObject = contentPane;
+                    // 直接复用缓存的组件
+                    window._panelParent.AddChild(cachedContent);
+                    window._contentPane = cachedContent;
+                    window.GObject = cachedContent;
+                }
+                else
+                {
+                    // 重新创建内容
+                    var obj = FairyUIPackageLoader.CreateObject(window.PackageName, window.ComponentName);
+                    var contentPane = obj as FairyGUI.GComponent;
+
+                    if (contentPane != null)
+                    {
+                        window._panelParent.AddChild(contentPane);
+                        window._contentPane = contentPane;
+                        window.GObject = contentPane;
+                    }
                 }
             }
         }
@@ -768,12 +801,14 @@ namespace GameLogic
         internal class UIWindowObject : ObjectBase
         {
             private FairyUIWindow _window;
+            public GComponent CachedContent { get; private set; }
 
             public static UIWindowObject Create(FairyUIWindow window)
             {
                 var obj = new UIWindowObject();
                 obj.Initialize(window.GetType().FullName, window);
                 obj._window = window;
+                obj.CachedContent = window._contentPane;
                 return obj;
             }
 
@@ -791,7 +826,7 @@ namespace GameLogic
             {
                 if (_window != null)
                 {
-                    // 销毁父节点（会同时销毁所有子节点）
+                    // 销毁父节点（会同时销毁所有子节点，包括CachedContent）
                     if (_window._panelParent != null)
                     {
                         _window._panelParent.Dispose();
@@ -801,6 +836,7 @@ namespace GameLogic
                     _window.GObject = null;
                 }
                 _window = null;
+                CachedContent = null;
             }
         }
 

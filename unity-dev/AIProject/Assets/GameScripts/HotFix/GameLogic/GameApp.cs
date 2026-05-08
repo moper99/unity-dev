@@ -52,6 +52,7 @@ public partial class GameApp
         BasicsBinder.BindAll();
         LoginModule.Instance.Active();
         BattleMainModule.Instance.Active();
+        
     }
 
     private static void Release()

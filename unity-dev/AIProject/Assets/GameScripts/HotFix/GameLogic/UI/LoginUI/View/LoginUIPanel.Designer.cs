@@ -32,7 +32,6 @@ namespace GameLogic
         #region UI Fields
 
         public GButton BtnEnterGame;
-        public GButton BtnSign;
         public Controller CtrlLoading;
         public GLoader LoaderEnter;
         public Transition TransShow;
@@ -46,7 +45,6 @@ namespace GameLogic
 
             // 自动绑定 UI 组件字段
             BtnEnterGame = (GButton)GetChild("btnEnterGame");
-            BtnSign = (GButton)GetChild("btnSign");
             CtrlLoading = GetController("ctrlLoading");
             LoaderEnter = (GLoader)GetChild("loaderEnter");
             TransShow = GetTransition("transShow");

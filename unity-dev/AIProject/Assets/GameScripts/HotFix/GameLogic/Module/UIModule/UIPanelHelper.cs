@@ -7,6 +7,51 @@ using UnityEngine;
 namespace GameLogic
 {
     /// <summary>
+    /// UI轻量级消息总线。
+    /// </summary>
+    public static class UIEventBus
+    {
+        private static readonly Dictionary<string, List<Action<object>>> _listeners = new Dictionary<string, List<Action<object>>>();
+
+        public static void AddListener(string key, Action<object> handler)
+        {
+            if (!_listeners.ContainsKey(key))
+            {
+                _listeners[key] = new List<Action<object>>();
+            }
+            if (!_listeners[key].Contains(handler))
+            {
+                _listeners[key].Add(handler);
+            }
+        }
+
+        public static void RemoveListener(string key, Action<object> handler)
+        {
+            if (_listeners.TryGetValue(key, out var list))
+            {
+                list.Remove(handler);
+                if (list.Count == 0)
+                {
+                    _listeners.Remove(key);
+                }
+            }
+        }
+
+        public static void Broadcast(string key, object data = null)
+        {
+            if (_listeners.TryGetValue(key, out var list))
+            {
+                // 使用副本遍历，防止在回调中移除监听导致异常
+                var snapshot = new List<Action<object>>(list);
+                foreach (var handler in snapshot)
+                {
+                    handler?.Invoke(data);
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// UI面板辅助工具类。
     /// 提供协程管理、延迟调用、定时器等功能，跟随窗口生命周期自动清理。
     /// </summary>
@@ -227,7 +272,46 @@ namespace GameLogic
 
         #endregion
 
-        #region 清理
+        #region 消息总线
+
+        private readonly List<(string key, Action<object> handler)> _myListeners = new List<(string, Action<object>)>();
+
+        /// <summary>
+        /// 注册UI事件监听（窗口销毁时自动注销）。
+        /// </summary>
+        public void AddListener(string key, Action<object> handler)
+        {
+            UIEventBus.AddListener(key, handler);
+            _myListeners.Add((key, handler));
+        }
+
+        /// <summary>
+        /// 移除UI事件监听。
+        /// </summary>
+        public void RemoveListener(string key, Action<object> handler)
+        {
+            UIEventBus.RemoveListener(key, handler);
+            _myListeners.RemoveAll(x => x.key == key && x.handler == handler);
+        }
+
+        /// <summary>
+        /// 广播UI事件。
+        /// </summary>
+        public void Broadcast(string key, object data = null)
+        {
+            UIEventBus.Broadcast(key, data);
+        }
+
+        private void ClearEventListeners()
+        {
+            foreach (var listener in _myListeners)
+            {
+                UIEventBus.RemoveListener(listener.key, listener.handler);
+            }
+            _myListeners.Clear();
+        }
+
+        #endregion
 
         /// <summary>
         /// 清理所有资源（窗口隐藏时调用）。
@@ -235,6 +319,8 @@ namespace GameLogic
         public void Clear()
         {
             StopAllCoroutines();
+
+            ClearEventListeners();
 
             // 清理延迟调用
             foreach (var kvp in _delayCalls)
@@ -253,7 +339,6 @@ namespace GameLogic
             _updates.Clear();
             _lateUpdates.Clear();
         }
-
-        #endregion
+        
     }
 }

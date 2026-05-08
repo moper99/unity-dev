@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using FairyGUI;
 using TEngine;
 using UnityEngine;
+#if ENABLE_URP
 using UnityEngine.Rendering.Universal;
+#endif
 
 namespace GameLogic
 {
@@ -164,6 +166,7 @@ namespace GameLogic
         /// </summary>
         private void OpenOrCloseBlurFeature()
         {
+#if ENABLE_URP
             bool isActive = IsBgBlurUI;
 
             // 获取UI相机
@@ -211,6 +214,7 @@ namespace GameLogic
             {
                 buiFeature.SetActive(isActive);
             }
+#endif
         }
 
         /// <summary>
@@ -236,6 +240,7 @@ namespace GameLogic
             return null;
         }
 
+#if ENABLE_URP
         /// <summary>
         /// 获取URP渲染特性。
         /// </summary>
@@ -257,6 +262,7 @@ namespace GameLogic
             // 旧版本可能需要其他方式获取
             return null;
         }
+#endif
 
         /// <summary>
         /// 设置UI层级。

@@ -73,7 +73,7 @@ namespace GameLogic
             Log.Info("点击进入游戏");
             
             // 执行登录
-           // DoLogin().Forget();
+            DoLogin().Forget();
         }
 
         /// <summary>
@@ -93,9 +93,6 @@ namespace GameLogic
             }
             else
             {
-                // 登录失败，恢复界面状态
-                CtrlLoading.selectedIndex = 0;
-                BtnEnterGame.enabled = true;
                 Log.Error("登录失败");
             }
         }

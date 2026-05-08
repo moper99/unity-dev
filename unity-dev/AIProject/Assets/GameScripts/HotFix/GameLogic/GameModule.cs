@@ -84,6 +84,7 @@ public class GameModule
     public static ILocalizationModule Localization => _localization ??= Get<ILocalizationModule>();
     
     private static ILocalizationModule _localization;
+    
     #endregion
     
     /// <summary>
@@ -114,5 +115,6 @@ public class GameModule
         _scene = null;
         _timer = null;
         _localization = null;
+
     }
 }

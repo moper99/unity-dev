@@ -1,0 +1,93 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+// ReSharper disable InconsistentNaming
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable PartialTypeWithSinglePart
+// 对应的Excel表格 B宝箱表.xlsx[Sheet1]
+#nullable enable
+namespace GameLogic {
+	public partial class CfgTreasureBox
+	{
+		public static readonly IReadOnlyDictionary<int, TreasureBoxConfig> Data = new Dictionary<int, TreasureBoxConfig>()
+		{
+			{1,
+ 				new TreasureBoxConfig(1,
+				new I18NString("CfgTreasureBox_name_1"),
+				1,
+				new I18NString("CfgTreasureBox_des_1"),
+				2,
+				new List<Tuple<int,int,int>>{new Tuple<int,int,int>(2,0,200),new Tuple<int,int,int>(8,0,2000),new Tuple<int,int,int>(106,600000002,1)},
+				new List<int>{20,40,40},
+				"Treasure_610000001",
+				"Treasure610000001",
+				1,
+				10,
+				new Vector3(0.0f, 1.0f, 0.0f),
+				new Vector3(0.0f, 180.0f, 0.0f),
+				new Vector3(3.0f, 3.0f, 3.0f),
+				1000004,
+				0.06f,
+				0.1f,
+				0.8f)},
+			{2,
+ 				new TreasureBoxConfig(2,
+				new I18NString("CfgTreasureBox_name_2"),
+				1,
+				new I18NString("CfgTreasureBox_des_2"),
+				2,
+				new List<Tuple<int,int,int>>{new Tuple<int,int,int>(2,0,100),new Tuple<int,int,int>(8,0,1000),new Tuple<int,int,int>(106,600000001,1)},
+				new List<int>{20,40,40},
+				"Treasure_610000002",
+				"Treasure610000002",
+				2,
+				30,
+				new Vector3(0.0f, 1.0f, 0.0f),
+				new Vector3(0.0f, 180.0f, 0.0f),
+				new Vector3(3.0f, 3.0f, 3.0f),
+				1000003,
+				0.07f,
+				0.09f,
+				0.8f)},
+			{3,
+ 				new TreasureBoxConfig(3,
+				new I18NString("CfgTreasureBox_name_3"),
+				1,
+				new I18NString("CfgTreasureBox_des_3"),
+				2,
+				new List<Tuple<int,int,int>>{new Tuple<int,int,int>(2,0,50),new Tuple<int,int,int>(8,0,500),new Tuple<int,int,int>(106,610000003,1)},
+				new List<int>{20,40,40},
+				"Treasure_610000003",
+				"Treasure610000003",
+				3,
+				50,
+				new Vector3(0.0f, 1.0f, 0.0f),
+				new Vector3(0.0f, 180.0f, 0.0f),
+				new Vector3(3.0f, 3.0f, 3.0f),
+				1000002,
+				0.08f,
+				0.08f,
+				0.8f)},
+			{7,
+ 				new TreasureBoxConfig(7,
+				new I18NString("CfgTreasureBox_name_7"),
+				3,
+				new I18NString("CfgTreasureBox_des_7"),
+				1,
+				new List<Tuple<int,int,int>>{new Tuple<int,int,int>(2,0,50)},
+				new List<int>{1},
+				"Treasure_610000003",
+				"Treasure610000003",
+				3,
+				50,
+				new Vector3(0.0f, 1.0f, 0.0f),
+				new Vector3(0.0f, 180.0f, 0.0f),
+				new Vector3(3.0f, 3.0f, 3.0f),
+				1000002,
+				0.08f,
+				0.08f,
+				0.8f)},
+		};
+	}
+}

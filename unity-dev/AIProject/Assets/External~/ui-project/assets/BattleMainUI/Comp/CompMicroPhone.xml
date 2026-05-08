@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="30,36">
+  <controller name="ctrlSelfMicro" pages="0,off,1,on" selected="0"/>
+  <displayList>
+    <image id="n65_nxki" name="n65" src="rpmbh" fileName="images/plus_smile_png.png" pkg="9leh0eyf" xy="-1,2"/>
+  </displayList>
+</component>

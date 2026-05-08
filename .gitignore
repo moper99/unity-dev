@@ -19,6 +19,10 @@ production/session-logs/
 *.swo
 *~
 
+# 但不要忽略 src/bin 这个特定的文件夹（跟踪它）
+!External~/
+
+
 # OS
 .DS_Store
 Thumbs.db

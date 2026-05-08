@@ -1,0 +1,206 @@
+{
+    "1": {
+        "id": 1,
+        "name": "深海宝箱1",
+        "name_i18n": "CfgTreasureBox_name_1",
+        "boxType": 1,
+        "des": "蕴含着强大星核力的宝箱，传说只有在深海才能发现",
+        "des_i18n": "CfgTreasureBox_des_1",
+        "type": 2,
+        "boxItem": [
+            [
+                2,
+                0,
+                200
+            ],
+            [
+                8,
+                0,
+                2000
+            ],
+            [
+                106,
+                600000002,
+                1
+            ]
+        ],
+        "weight": [
+            20,
+            40,
+            40
+        ],
+        "iconAsset": "Treasure_610000001",
+        "assetName": "Treasure610000001",
+        "quality": 1,
+        "boxWeighting": 10,
+        "pos": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "rotation": [
+            0.0,
+            180.0,
+            0.0
+        ],
+        "scale": [
+            3.0,
+            3.0,
+            3.0
+        ],
+        "modelScaleId": 1000004,
+        "bite": 0.06,
+        "struggle": 0.1,
+        "defaultSescale": 0.8
+    },
+    "2": {
+        "id": 2,
+        "name": "深海宝箱2",
+        "name_i18n": "CfgTreasureBox_name_2",
+        "boxType": 1,
+        "des": "闪耀着耀眼光芒的宝箱，光从外观上看就知道价值连城",
+        "des_i18n": "CfgTreasureBox_des_2",
+        "type": 2,
+        "boxItem": [
+            [
+                2,
+                0,
+                100
+            ],
+            [
+                8,
+                0,
+                1000
+            ],
+            [
+                106,
+                600000001,
+                1
+            ]
+        ],
+        "weight": [
+            20,
+            40,
+            40
+        ],
+        "iconAsset": "Treasure_610000002",
+        "assetName": "Treasure610000002",
+        "quality": 2,
+        "boxWeighting": 30,
+        "pos": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "rotation": [
+            0.0,
+            180.0,
+            0.0
+        ],
+        "scale": [
+            3.0,
+            3.0,
+            3.0
+        ],
+        "modelScaleId": 1000003,
+        "bite": 0.07,
+        "struggle": 0.09,
+        "defaultSescale": 0.8
+    },
+    "3": {
+        "id": 3,
+        "name": "深海宝箱3",
+        "name_i18n": "CfgTreasureBox_name_3",
+        "boxType": 1,
+        "des": "外观朴实无华的宝箱，手感沉甸甸的让人忍不住想打开",
+        "des_i18n": "CfgTreasureBox_des_3",
+        "type": 2,
+        "boxItem": [
+            [
+                2,
+                0,
+                50
+            ],
+            [
+                8,
+                0,
+                500
+            ],
+            [
+                106,
+                610000003,
+                1
+            ]
+        ],
+        "weight": [
+            20,
+            40,
+            40
+        ],
+        "iconAsset": "Treasure_610000003",
+        "assetName": "Treasure610000003",
+        "quality": 3,
+        "boxWeighting": 50,
+        "pos": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "rotation": [
+            0.0,
+            180.0,
+            0.0
+        ],
+        "scale": [
+            3.0,
+            3.0,
+            3.0
+        ],
+        "modelScaleId": 1000002,
+        "bite": 0.08,
+        "struggle": 0.08,
+        "defaultSescale": 0.8
+    },
+    "7": {
+        "id": 7,
+        "name": "深海宝箱3",
+        "name_i18n": "CfgTreasureBox_name_7",
+        "boxType": 3,
+        "des": "外观朴实无华的宝箱，手感沉甸甸的让人忍不住想打开",
+        "des_i18n": "CfgTreasureBox_des_7",
+        "type": 1,
+        "boxItem": [
+            [
+                2,
+                0,
+                50
+            ]
+        ],
+        "weight": [
+            1
+        ],
+        "iconAsset": "Treasure_610000003",
+        "assetName": "Treasure610000003",
+        "quality": 3,
+        "boxWeighting": 50,
+        "pos": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "rotation": [
+            0.0,
+            180.0,
+            0.0
+        ],
+        "scale": [
+            3.0,
+            3.0,
+            3.0
+        ],
+        "modelScaleId": 1000002,
+        "bite": 0.08,
+        "struggle": 0.08,
+        "defaultSescale": 0.8
+    }
+}

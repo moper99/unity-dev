@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" opaque="false" designImage="ui://iv4p17jjeeoy1fuw6dk" designImageAlpha="10">
+  <controller name="ctrlJoystick" pages="0,hide,1,show" selected="0"/>
+  <displayList>
+    <component id="n16_dlqw" name="compUserInfo" src="veds1fuw6dh" fileName="Comp/CompMainUserInfo.xml" xy="20,20">
+      <relation target="" sidePair="left-left,top-top"/>
+    </component>
+  </displayList>
+  <transition name="transShow" frameRate="30">
+    <item time="0" type="Alpha" tween="true" startValue="0" endValue="1" duration="16"/>
+  </transition>
+  <transition name="transHide" frameRate="30">
+    <item time="0" type="Alpha" tween="true" startValue="1" endValue="0" duration="6"/>
+  </transition>
+</component>

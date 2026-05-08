@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="agvfrfcc">
+  <resources>
+    <image id="h9co0" name="caijila.png" path="/Image/" scale="9grid" scale9grid="69,8,138,16"/>
+    <image id="h9co1" name="caiji2la.png" path="/Image/" scale="9grid" scale9grid="56,7,112,14"/>
+    <component id="h9co2" name="LauncherUI.xml" path="/" exported="true"/>
+    <component id="h9co3" name="ProgressBar1.xml" path="/Comp/"/>
+    <component id="h9co4" name="LoadTipsUI.xml" path="/" exported="true"/>
+    <component id="h9co5" name="Button1.xml" path="/Comp/"/>
+    <image id="h9co6" name="k13la.png" path="/Image/" scale="9grid" scale9grid="40,13,80,26"/>
+    <image id="h9co7" name="b5la.png" path="/Image/" scale="9grid" scale9grid="40,17,80,34"/>
+    <image id="h9co8" name="b6la.png" path="/Image/" scale="9grid" scale9grid="9,5,66,16"/>
+    <image id="h9co9" name="k11la.png" path="/Image/" scale="9grid" scale9grid="12,12,24,24"/>
+    <component id="h9coa" name="Button2.xml" path="/Comp/"/>
+    <component id="h9cob" name="Button3.xml" path="/Comp/"/>
+    <image id="yxt7c" name="0.png" path="/Image/"/>
+    <image id="yxt7d" name="1.png" path="/Image/"/>
+    <image id="yxt7e" name="2.png" path="/Image/"/>
+    <image id="yxt7f" name="3.png" path="/Image/"/>
+    <image id="yxt7g" name="4.png" path="/Image/"/>
+    <image id="yxt7h" name="5.png" path="/Image/"/>
+    <image id="yxt7i" name="7.png" path="/Image/"/>
+    <image id="yxt7j" name="8.png" path="/Image/"/>
+    <image id="yxt7k" name="btnimage.png" path="/Image/"/>
+  </resources>
+  <publish name="LauncherUI" path="..\..\Launcher\Resources\FairyGUI" packageCount="2" genCode="true" codePath="..\..\Launcher\Scripts"/>
+</packageDescription>

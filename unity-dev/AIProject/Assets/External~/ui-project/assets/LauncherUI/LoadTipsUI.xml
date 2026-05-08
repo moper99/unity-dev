@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334">
+  <displayList>
+    <image id="n0_h9co" name="n0" src="h9co9" fileName="Image/k11.png" xy="57,441" size="635,451"/>
+    <component id="n1_h9co" name="btnConfirm" src="h9co5" fileName="Comp/Button1.xml" xy="88,799"/>
+    <component id="n2_h9co" name="btnUpdate" src="h9coa" fileName="Comp/Button2.xml" xy="293,789"/>
+    <component id="n3_h9co" name="btnCancel" src="h9cob" fileName="Comp/Button3.xml" xy="533,802"/>
+    <text id="n4_h9co" name="txtDesc" xy="104,480" size="535,275" fontSize="26" color="#ffffff" autoSize="none" text=""/>
+  </displayList>
+</component>

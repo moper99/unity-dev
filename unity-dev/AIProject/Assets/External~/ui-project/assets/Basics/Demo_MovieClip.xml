@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1136,570">
+  <displayList>
+    <text id="n0" name="n0" xy="16,9" size="605,71" fontSize="22" autoSize="none" text="1. Import gif directly&#xA;2. Use builtin tool to create movieclip"/>
+    <movieclip id="n8" name="n8" src="hixt1v" fileName="images/nlge1k.jta" xy="44,109"/>
+    <movieclip id="n13" name="n13" src="hixt1v" fileName="images/nlge1k.jta" xy="52,243" color="#0066cc"/>
+    <movieclip id="n14" name="n14" src="hixt1v" fileName="images/nlge1k.jta" xy="70,416" frame="1" playing="false"/>
+    <movieclip id="n15" name="n15" src="hixt1v" fileName="images/nlge1k.jta" xy="298,227" pivot="0.5,0.5" size="155,144" alpha="0.33" rotation="-49" frame="1"/>
+    <movieclip id="n19" name="n19" src="t9fj5f" fileName="images/pet.jta" xy="172,111"/>
+    <movieclip id="n22" name="n22" src="hixt1v" fileName="images/nlge1k.jta" xy="176,243" grayed="true"/>
+  </displayList>
+</component>

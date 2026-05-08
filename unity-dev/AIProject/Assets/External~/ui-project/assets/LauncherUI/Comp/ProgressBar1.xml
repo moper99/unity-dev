@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="277,32" extention="ProgressBar">
+  <displayList>
+    <image id="n0_h9co" name="n0" src="h9co0" fileName="Image/caijila.png" xy="0,0" size="277,32">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n1_h9co" name="bar" src="h9co1" fileName="Image/caiji2la.png" xy="23,-1" size="227,30" fillMethod="hz">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+  </displayList>
+  <ProgressBar/>
+</component>

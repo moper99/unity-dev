@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="159,52" extention="Button">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+  <displayList>
+    <image id="n0_h9co" name="n0" src="h9co6" fileName="Image/k13.png" xy="0,0" size="159,52">
+      <gearDisplay controller="button" pages="0"/>
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n1_h9co" name="n1" src="h9co6" fileName="Image/k13.png" xy="0,0" size="159,52">
+      <gearDisplay controller="button" pages="2"/>
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n2_h9co" name="n2" src="h9co6" fileName="Image/k13.png" xy="0,0" size="159,52">
+      <gearDisplay controller="button" pages="1,3"/>
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <text id="n3_h9co" name="n3" xy="48,13" pivot="0.5,0.5" size="62,32" fontSize="22" color="#ffffff" align="center" vAlign="middle" letterSpacing="14" shadowColor="#000000" shadowOffset="1,1" text="确定"/>
+  </displayList>
+  <Button/>
+</component>

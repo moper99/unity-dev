@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="iv4p17jj">
+  <resources>
+    <component id="n7b80" name="BattleMainUIPanel.xml" path="/" exported="true"/>
+    <image id="xing5" name="main_kuang_bg03_9g.png" path="/Image/" exported="true" scale="9grid" scale9grid="11,10,22,20"/>
+    <image id="prjx47" name="main_sta_bar_floor.png" path="/Image/" exported="true"/>
+    <image id="prjx48" name="main_star_img.png" path="/Image/" exported="true"/>
+    <image id="prjx49" name="main_stamina_bar.png" path="/Image/" exported="true"/>
+    <image id="prjx4c" name="main_role_tips_bg01.png" path="/Image/" exported="true" scale="9grid" scale9grid="51,37,102,14"/>
+    <image id="prjx4f" name="main_role_bg.png" path="/Image/" exported="true"/>
+    <image id="prjx4g" name="main_more_icon_bg.png" path="/Image/" exported="true"/>
+    <image id="gzd56u" name="main_perspective_point01.png" path="/Image/" exported="true"/>
+    <image id="gzd56v" name="main_perspective_point02.png" path="/Image/" exported="true"/>
+    <image id="gsk37w" name="main_login_bg.png" path="/Image/" exported="true" scale="9grid" scale9grid="0,2,465,2"/>
+    <image id="py9p9y" name="stamina_tips.png" path="/Image/" exported="true"/>
+    <image id="juj9ad" name="main_bottom_mask01.png" path="/Image/" exported="true" scale="9grid" scale9grid="6,0,20,315"/>
+    <image id="kvekb3" name="main_gift_btn_txt.png" path="/Image/" exported="true" scale="9grid" scale9grid="19,16,5,0"/>
+    <image id="hd9db8" name="seabed_main_btn_detail.png" path="/Image/"/>
+    <image id="hd9db9" name="main_lv_bg.png" path="/Image/" exported="true"/>
+    <component id="d5pibk" name="ProgressGatherBar.xml" path="/Comp/"/>
+    <image id="f12abq" name="main_collect_bar_bg.png" path="/Image/"/>
+    <image id="f12abr" name="main_collect_bar.png" path="/Image/" scale="9grid" scale9grid="8,0,14,10"/>
+    <image id="f12abs" name="main_collect_countdown.png" path="/Image/"/>
+    <image id="tf5ic5" name="main_matchtips_bg.png" path="/Image/" exported="true" scale="9grid" scale9grid="45,18,90,36"/>
+    <image id="tf5ic7" name="main_matchtips_bg02.png" path="/Image/" scale="9grid" scale9grid="39,15,78,30"/>
+    <component id="veds1fuw6dh" name="CompMainUserInfo.xml" path="/Comp/" exported="true"/>
+    <image id="yxt71fuw6di" name="Play_Joystick_bg.png" path="/Image/"/>
+    <image id="yxt71fuw6dj" name="Play_Joystick_handle.png" path="/Image/"/>
+    <image id="yxt71fuw6dk" name="Slider11_Fill_Blue.png" path="/Image/"/>
+    <image id="yxt71fuw6dl" name="Slider11_Fill_Red.png" path="/Image/"/>
+    <image id="yxt71fuw6dm" name="Slider11_Fill_Yellow.png" path="/Image/"/>
+    <image id="yxt71fuw6dn" name="Slider11_Frame.png" path="/Image/"/>
+    <image id="yxt71fuw6do" name="zd_img_light.png" path="/Image/"/>
+    <component id="nxki1fuw6dp" name="CompHeadBg.xml" path="/Comp/" exported="true"/>
+    <component id="nxki1fuw6dq" name="CompMicroPhone.xml" path="/Comp/" exported="true"/>
+  </resources>
+  <publish name=""/>
+</packageDescription>

@@ -1,0 +1,11 @@
+{
+  "name": "GenCode",
+  "displayName": "代码自动生成",
+  "description": "\t自动生成C#代码",
+  "version": "1.0",
+  "author": {
+    "name": "test"
+  },
+  "icon": "icon.png",
+  "main": "main.lua"
+}

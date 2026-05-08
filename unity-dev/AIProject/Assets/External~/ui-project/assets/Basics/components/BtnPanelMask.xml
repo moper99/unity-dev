@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" extention="Button">
+  <controller name="ctrlBlack" pages="0,normal,1,zero,2,hide" selected="0"/>
+  <displayList>
+    <graph id="n0_q363" name="graph" xy="-234,-145" size="1218,1624" alpha="0.8" type="rect" lineSize="0" fillColor="#ff000000">
+      <gearDisplay controller="ctrlBlack" pages="0,1"/>
+      <gearLook controller="ctrlBlack" pages="0,1,2" values="0.8,0,0,1|0,0,0,1|1,0,0,1"/>
+      <relation target="" sidePair="height-height,width-width"/>
+    </graph>
+  </displayList>
+  <Button/>
+</component>

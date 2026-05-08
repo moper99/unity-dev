@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" pivot="0.5,0.5" extention="Button">
+  <displayList>
+    <image id="n9_fdqa" name="n9" src="rpmbv" fileName="images/k20.png" pkg="9leh0eyf" xy="0,0" size="750,1334">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+  </displayList>
+  <Button downEffect="scale" downEffectValue=".9"/>
+  <transition name="transShow"/>
+</component>

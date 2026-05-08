@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="6hsdvpta">
+  <resources>
+    <component id="agxkj" name="LoginUIPanel.xml" path="/" exported="true"/>
+    <image id="jr1o1q" name="bag_name_bg02.png" path="/Image/" scale="9grid" scale9grid="50,50,20,20"/>
+    <image id="jr1o1r" name="bag_name_bg01.png" path="/Image/" scale="9grid" scale9grid="15,0,30,40"/>
+    <component id="ol392c" name="BtnLogin.xml" path="/Comp/"/>
+    <image id="yxt72d" name="login_agreement_btn_n.png" path="/Image/" scale9grid="32,20,64,40"/>
+    <image id="yxt72e" name="login_agreement_btn_s.png" path="/Image/"/>
+    <image id="yxt72f" name="login_btn.png" path="/Image/"/>
+    <image id="yxt72g" name="login_google.png" path="/Image/"/>
+    <image id="yxt72h" name="login_line.png" path="/Image/"/>
+    <image id="yxt72i" name="login_mask.png" path="/Image/"/>
+    <image id="yxt72j" name="login_role_bg.png" path="/Image/"/>
+    <image id="yxt72k" name="login_role_bg02.png" path="/Image/"/>
+    <image id="yxt72l" name="login_role_bg03.png" path="/Image/"/>
+    <component id="payy2m" name="LoginSignPopPanel.xml" path="/" exported="true"/>
+    <component id="payy2n" name="ButtonSign.xml" path="/Comp/"/>
+    <component id="payy2o" name="Button1.xml" path="/Comp/"/>
+  </resources>
+  <publish name=""/>
+</packageDescription>

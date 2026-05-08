@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="800,600">
+  <displayList>
+    <image id="n0_payy" name="n0" src="zd9g4b" fileName="images/k21.png" pkg="9leh0eyf" xy="0,0" size="800,600"/>
+    <component id="n1_payy" name="btngoogle" src="payy2n" fileName="Comp/ButtonSign.xml" xy="332,429"/>
+  </displayList>
+</component>

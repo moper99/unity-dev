@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" opaque="false">
+  <displayList>
+    <component id="n1_q363" name="btnBackGround" src="payy8c" fileName="components/BtnPanelMask.xml" xy="-234,-145" size="1218,1624">
+      <relation target="" sidePair="width-width,height-height"/>
+    </component>
+    <graph id="n3_n7b8" name="graphSafeTop" xy="0,0" size="750,67" visible="false" touchable="false" type="rect">
+      <relation target="" sidePair="top-top"/>
+    </graph>
+    <graph id="n5_n7b8" name="graphContent" xy="0,67" size="750,1200" visible="false" touchable="false" type="rect">
+      <relation target="n3_n7b8" sidePair="topext-bottom"/>
+      <relation target="" sidePair="width-width"/>
+      <relation target="n4_n7b8" sidePair="bottomext-top"/>
+    </graph>
+    <graph id="n4_n7b8" name="graphSafeBottom" xy="0,1267" pivot="0,1" size="750,67" visible="false" touchable="false" type="rect">
+      <relation target="" sidePair="bottom-bottom"/>
+    </graph>
+  </displayList>
+  <transition name="transShow" frameRate="30">
+    <item time="0" type="Alpha" target="n1_q363" tween="true" startValue="0" endValue="1" duration="5"/>
+  </transition>
+  <transition name="transHide" frameRate="30">
+    <item time="0" type="Alpha" target="n1_q363" tween="true" startValue="1" endValue="0" duration="5"/>
+  </transition>
+</component>

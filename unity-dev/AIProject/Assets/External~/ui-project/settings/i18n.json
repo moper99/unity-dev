@@ -1,0 +1,14 @@
+{
+  "langFiles": [
+    {
+      "name": "Chinese",
+      "path": "..\\..\\GameRes\\Configs\\Localization\\Localization_zh.xml",
+      "fontName": ""
+    },
+    {
+      "name": "Japanese",
+      "path": "..\\..\\GameRes\\Configs\\Localization\\Localization_ja.xml",
+      "fontName": ""
+    }
+  ]
+}

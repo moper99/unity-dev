@@ -1,0 +1,33 @@
+{
+  "font": "ui://is1ebmy9qkkeax",
+  "fontSize": 12,
+  "textColor": "#000000",
+  "fontAdjustment": false,
+  "colorScheme": [
+    "自定义颜色 #4B340B",
+    "字体阴影 #1b2e39",
+    "普通字体颜色 #B1B8C8",
+    "紫色1 #7781c1",
+    "正文灰 #666666",
+    "粉红 #ebe6ff"
+  ],
+  "fontSizeScheme": [
+    "自定义字体大小 32",
+    "自定义字体大小 26",
+    "自定义字体大小 22",
+    "自定义字体大小 18"
+  ],
+  "fontScheme": [
+    "默认字体"
+  ],
+  "scrollBars": {
+    "horizontal": "",
+    "vertical": "",
+    "defaultDisplay": "auto"
+  },
+  "tipsRes": "",
+  "buttonClickSound": "ui://qy1jz5bxgt3w0",
+  "pivot": "default",
+  "listClearOnPublish": false,
+  "fileName": "Common"
+}

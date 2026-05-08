@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" designImage="ui://6hsdvptavi6z12" designImageAlpha="0" designImageLayer="1">
+  <controller name="ctrlLoading" pages="1,yes,0,no" selected="0"/>
+  <displayList>
+    <loader id="n6_agxk" name="loaderEnter" xy="1,0" size="750,1334">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+    <component id="n26_payy" name="btnEnterGame" src="payy2o" fileName="Comp/Button1.xml" xy="0,1099">
+      <relation target="" sidePair="left-left,top-top"/>
+    </component>
+  </displayList>
+  <transition name="transShow" autoPlayRepeat="-1" frameRate="30"/>
+</component>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="290,101">
+  <controller name="ctrlSelfMicro" pages="0,off,1,on" selected="0"/>
+  <displayList>
+    <component id="n16_dlqw" name="compHeadBg" src="nxki1fuw6dp" fileName="Comp/CompHeadBg.xml" xy="0,1"/>
+    <component id="n64_o11v" name="compMicroPhone" src="nxki1fuw6dq" fileName="Comp/CompMicroPhone.xml" xy="67,63"/>
+    <text id="n181_hd9d" name="txtUserName" xy="112,39" size="161,34" fontSize="20" color="#ffffff" vAlign="middle" ubb="true" vars="true" autoSize="shrink" text="name"/>
+    <image id="n182_hd9d" name="n182" src="hd9db9" fileName="Image/main_lv_bg.png" xy="3,68"/>
+    <text id="n183_hd9d" name="txtlevel" xy="5,69" pivot="0.5,0.5" size="26,29" fontSize="20" color="#ffffff" strokeColor="#4dad72" text="99"/>
+  </displayList>
+</component>

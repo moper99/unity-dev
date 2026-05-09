@@ -1,7 +1,7 @@
 using TEngine;
 using UnityEngine;
 
-namespace Launcher
+namespace GameLogic
 {
     public static class LanguageExtend
     {

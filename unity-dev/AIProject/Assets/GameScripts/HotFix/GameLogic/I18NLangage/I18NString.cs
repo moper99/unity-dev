@@ -1,9 +1,5 @@
-// ReSharper disable InconsistentNaming
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable PartialTypeWithSinglePart
-#nullable enable
 
-using Launcher;
+#nullable enable
 
 namespace GameLogic {
     public class I18NString {

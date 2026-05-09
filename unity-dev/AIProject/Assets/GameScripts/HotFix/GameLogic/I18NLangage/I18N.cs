@@ -4,7 +4,7 @@ using TEngine;
 using UnityEngine;
 using YooAsset;
 
-namespace Launcher
+namespace GameLogic
 {
     public static class I18N
     {
@@ -14,7 +14,7 @@ namespace Launcher
         public static SystemLanguage CurLanguage => _lang.GetSystemLanguage();
 
         private static Dictionary<string, string> _strMap;
-        private static Dictionary<string, string> _aotStrMap;
+
 
         public static Language GetSaveLanguage()
         {
@@ -37,16 +37,7 @@ namespace Launcher
             }
             return _strMap[strID];
         }
-
-        public static string GetAOTString(string strID)
-        {
-            if (!_aotStrMap.ContainsKey(strID))
-            {
-                Log.Error($"国际化字符串:{strID} => 找不到{_lang}语言下的文本。");
-                return "";
-            }
-            return _aotStrMap[strID];
-        }
+        
 
         public static void InitStrings()
         {
@@ -63,17 +54,6 @@ namespace Launcher
                 _strMap[pa.Key] = pa.Value;
             }
             Log.Error($"i18n string init");
-        }
-
-        public static void InitAOTStrings()
-        {
-            var la = GetSaveLanguage();
-            _lang = la;
-            var fileName = la.GetAOTFileName();
-            using var handle = new AotResHandler(fileName);
-            var asset = handle.LoadAssetSync<TextAsset>(fileName);
-            _aotStrMap = File2Dict(asset);
-            Log.Error($"aot i18n string init");
         }
 
         private static Dictionary<string, string> File2Dict(TextAsset textAsset)

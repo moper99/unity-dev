@@ -2,6 +2,6 @@
 # 公共路径定义
 EXCEL_DIR="excel/"
 JSON_DIR="json/"
-CLIENT_DIR="../../GameScripts/Runtime/Configs/Gen"
+CLIENT_DIR="../../GameScripts/HotFix/GameLogic/ConfigsGen"
 TRANSLATE_DIR="translate_files/"
-TRANSLATE_MERGE_DIR="../../GameRes/Configs/Localization/"
+TRANSLATE_MERGE_DIR="../../AssetRaw/Configs/Localization/"

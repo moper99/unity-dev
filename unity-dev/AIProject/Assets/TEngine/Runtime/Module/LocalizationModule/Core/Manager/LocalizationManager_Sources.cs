@@ -66,10 +66,10 @@ namespace TEngine.Localization
 			}
 			
 			Debug.Log("I2LocalizationManager 加载编辑器资源数据");
-			var sourceAsset = UnityEditor.AssetDatabase.LoadAssetAtPath<LanguageSourceAsset>(LocalizationUtility.I2GlobalSourcesEditorPath);
+			var sourceAsset = UnityEditor.AssetDatabase.LoadAssetAtPath<LanguageSourceAsset>(LocalizationUtils.I2GlobalSourcesEditorPath);
 			if (sourceAsset == null)
 			{
-				Debug.LogError($"错误 没有找到编辑器下的资源 {LocalizationUtility.I2GlobalSourcesEditorPath}");
+				Debug.LogError($"错误 没有找到编辑器下的资源 {LocalizationUtils.I2GlobalSourcesEditorPath}");
 				return null;
 			}
 

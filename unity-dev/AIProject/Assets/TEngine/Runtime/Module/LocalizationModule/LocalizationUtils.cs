@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace TEngine
 {
     /// <summary>
-    /// 默认本地化辅助器。
+    /// 统一的本地化辅助工具类。
     /// </summary>
-    public class LocalizationUtility
+    public static class LocalizationUtils
     {
 #if UNITY_EDITOR
         public const string I2GlobalSourcesEditorPath = "Assets/Editor/I2Localization/I2Languages.asset";
 #endif
-
         public const string I2ResAssetNamePrefix = "I2_";
 
         /// <summary>
@@ -74,7 +73,7 @@ namespace TEngine
         private static readonly Dictionary<Language, string> _languageMap = new Dictionary<Language, string>();
         private static readonly Dictionary<string, Language> _languageStrMap = new Dictionary<string, Language>();
 
-        static LocalizationUtility()
+        static LocalizationUtils()
         {
             RegisterLanguageMap(Language.English);
             RegisterLanguageMap(Language.ChineseSimplified, "Chinese");
@@ -89,46 +88,54 @@ namespace TEngine
             {
                 str = language.ToString();
             }
-
             _languageMap[language] = str;
             _languageStrMap[str] = language;
         }
 
-        /// <summary>
-        /// 根据语言字符串获取语言枚举。
-        /// </summary>
-        /// <param name="str">语言字符串。</param>
-        /// <returns>语言枚举。</returns>
         public static Language GetLanguage(string str)
         {
-            if (string.IsNullOrEmpty(str))
-            {
-                return Language.Unspecified;
-            }
+            if (string.IsNullOrEmpty(str)) return Language.Unspecified;
+            if (_languageStrMap.TryGetValue(str, out var language)) return language;
+            return Language.English;
+        }
 
-            if (_languageStrMap.TryGetValue(str, out var language))
-            {
-                return language;
-            }
-
-            language = Language.English;
-            return language;
+        public static string GetLanguageStr(Language language)
+        {
+            if (_languageMap.TryGetValue(language, out var ret)) return ret;
+            return "English";
         }
 
         /// <summary>
-        /// 根据语言枚举获取语言字符串。
+        /// 获取语言的简写字符串 (如 zh, ja)。
         /// </summary>
-        /// <param name="language">语言枚举。</param>
-        /// <returns>语言字符串。</returns>
-        public static string GetLanguageStr(Language language)
+        public static string GetLangShortString(this Language language)
         {
-            if (_languageMap.TryGetValue(language, out var ret))
-            {
-                return ret;
-            }
+            return language == Language.Japanese ? "ja" : "zh";
+        }
 
-            ret = "English";
-            return ret;
+        public static string GetFileName(this Language lang) => $"string_{lang.GetLangShortString()}";
+        public static string GetAOTFileName(this Language lang) => $"aot_string_{lang.GetLangShortString()}.json";
+        public static string GetConfigFileName(this Language lang) => $"config_string_{lang.GetLangShortString()}";
+
+        public static string GetPrivacyDetailFileName(this Language lang)
+        {
+            return lang == Language.Japanese ? "privacyjp" : "privacycn";
+        }
+
+        public static string GetAgreementDetailFileName(this Language lang)
+        {
+            return lang == Language.Japanese ? "userjp" : "usercn";
+        }
+
+        /// <summary>
+        /// 将项目语言枚举转换为 Unity 系统语言枚举。
+        /// </summary>
+        public static UnityEngine.SystemLanguage ToSystemLanguage(this Language lang)
+        {
+            if (lang == Language.Japanese) return UnityEngine.SystemLanguage.Japanese;
+            if (lang == Language.English) return UnityEngine.SystemLanguage.English;
+            if (lang == Language.Korean) return UnityEngine.SystemLanguage.Korean;
+            return UnityEngine.SystemLanguage.Chinese;
         }
     }
 }

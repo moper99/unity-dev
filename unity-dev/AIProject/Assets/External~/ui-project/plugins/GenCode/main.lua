@@ -4,6 +4,8 @@ local genCode = require(PluginPath..'/GenCodeLua')
 
 local AOTName="LauncherUI"
 
+local Langage="/../../AssetRaw/Configs/Localization/test.xml"
+
 local skipCodePkgMap = {
     ["Textures"] = true,
 }
@@ -70,7 +72,7 @@ function ExportLocalizationText()
     handler:Parse(packages, true, false)
     
     --文件导出路径
-    local exportPath = CS.FairyEditor.App.project.basePath .. "/../../GameRes/Configs/Localization/test.xml"
+    local exportPath = CS.FairyEditor.App.project.basePath..Langage
     -- 导出字符串到 XML 文件
     handler:Export(exportPath, false)
 
@@ -78,16 +80,17 @@ function ExportLocalizationText()
     fprint("导出多语言文件成功:"..exportPath)
 end
 
+--[[
 local toolMenu = App.menu:GetSubMenu("tool");
 toolMenu:AddItem("导出多语言文本", "ExportLocalizationText", function(menuItem)
     ExportLocalizationText();
 end)
-
+--]]
 -------do cleanup here-------
 
 function onDestroy()
-    CS.FairyGUI.Timers.inst:Remove(OnUpdateCheckAppActive)
-    toolMenu:RemoveItem("ExportLocalizationText")
+   -- CS.FairyGUI.Timers.inst:Remove(OnUpdateCheckAppActive)
+   -- toolMenu:RemoveItem("ExportLocalizationText")
 end
 
 

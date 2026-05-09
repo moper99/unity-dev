@@ -519,7 +519,7 @@ namespace GameLogic
                     _transBgHide = _panelParent.GetTransition("transHide");
                 }
             }
-
+            
             OnRefresh();
         }
 
@@ -1344,9 +1344,10 @@ namespace GameLogic
         #endregion
 
         #region 便捷方法
-
+        
         /// <summary>
         /// 关闭自身窗口。
+
         /// </summary>
         protected void CloseSelf()
         {

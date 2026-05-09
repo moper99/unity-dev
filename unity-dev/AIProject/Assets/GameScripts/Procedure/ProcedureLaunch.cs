@@ -46,37 +46,24 @@ namespace Procedure
         {
             if (_resourceModule.PlayMode == EPlayMode.EditorSimulateMode && RootModule.Instance.EditorLanguage == Language.Unspecified)
             {
-                // 编辑器资源模式直接使用 Inspector 上设置的语言
                 return;
             }
             
             ILocalizationModule localizationModule = ModuleSystem.GetModule<ILocalizationModule>();
             Language language = localizationModule.Language;
+
             if (Utility.PlayerPrefs.HasSetting(Constant.Setting.Language))
             {
-                try
-                {
-                    string languageString = Utility.PlayerPrefs.GetString(Constant.Setting.Language);
-                    language = (Language)System.Enum.Parse(typeof(Language), languageString);
-                }
-                catch(System.Exception exception)
-                {
-                    Log.Error("Init language error, reason {0}",exception.ToString());
-                }
+                string languageString = Utility.PlayerPrefs.GetString(Constant.Setting.Language);
+                language = LocalizationUtils.GetLanguage(languageString);
             }
             
-            if (language != Language.English
-                && language != Language.ChineseSimplified
-                && language != Language.ChineseTraditional)
+            if (language == Language.Unspecified)
             {
-                // 若是暂不支持的语言，则使用英语
                 language = Language.English;
-            
-                Utility.PlayerPrefs.SetString(Constant.Setting.Language, language.ToString());
-                Utility.PlayerPrefs.Save();
             }
             
-            localizationModule.Language = language;
+            localizationModule.SetLanguage(language);
             Log.Info("Init language settings complete, current language is '{0}'.", language.ToString());
         }
 
